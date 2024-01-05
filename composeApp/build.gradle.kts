@@ -43,11 +43,15 @@ kotlin {
             api(libs.compose.window.size)
 
             implementation("com.darkrockstudios:mpfilepicker:3.1.0")
+
+
+            val ktorVersion = "2.3.7"
+            implementation("io.ktor:ktor-client-logging:$ktorVersion")
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.java)
-
         }
     }
 }
