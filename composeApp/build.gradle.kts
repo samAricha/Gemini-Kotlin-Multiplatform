@@ -24,6 +24,9 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(libs.ktor.client.android)
+            implementation(libs.voyager)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -38,9 +41,13 @@ kotlin {
 
             implementation(libs.koalaplot)
             api(libs.compose.window.size)
+
+            implementation("com.darkrockstudios:mpfilepicker:3.1.0")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.ktor.client.java)
+
         }
     }
 }

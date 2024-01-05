@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -38,10 +39,18 @@ fun App() {
     var content by remember { mutableStateOf("") }
     var showProgress by remember { mutableStateOf(false) }
 
+    var showFilePicker by remember { mutableStateOf(false) }
+
+    val fileType = listOf("jpg", "png")
+    FilePicker(show = showFilePicker, fileExtensions = fileType) { file ->
+        showFilePicker = false
+        // do something with the file
+    }
+
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
 //        val textPart = TextImagePart.Text("Prompt text here")
-        val imagePart = createImagePart(geminiApi,"path/to/your/image.jpg") // Replace with the actual path
+//        val imagePart = createImagePart(geminiApi,"path/to/your/image.jpg") // Replace with the actual path
 
 
         Column(
@@ -60,11 +69,11 @@ fun App() {
                         if (prompt.isNotBlank()) {
                             val textPart = TextImagePart.Text(prompt)
 
-                            coroutineScope.launch {
-                                showProgress = true
-                                content = generateContent(geminiApi, textPart, imagePart)
-                                showProgress = false
-                            }
+//                            coroutineScope.launch {
+//                                showProgress = true
+//                                content = generateContent(geminiApi, textPart, imagePart)
+//                                showProgress = false
+//                            }
                         }
                     },
 
