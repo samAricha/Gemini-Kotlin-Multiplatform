@@ -13,7 +13,9 @@ import java.io.File
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun App() {
+fun App(
+    imagePicker: ImagePicker
+) {
 
 
 
@@ -50,7 +52,9 @@ fun App() {
     MaterialTheme {
 
 
-        ImageSelectionScreen()
+        ImageSelectionScreen(
+            imagePicker = imagePicker
+        )
 //        var showContent by remember { mutableStateOf(false) }
 
 

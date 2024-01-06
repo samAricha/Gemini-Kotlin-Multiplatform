@@ -3,7 +3,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 
-//actual class ImagePickerFactory {
+actual class ImagePickerFactory {
 
     @Composable
     actual fun createPicker(): ImagePicker {
@@ -12,4 +12,4 @@ import androidx.compose.ui.platform.LocalContext
             ImagePicker(activity)
         }
     }
-//}
+}
