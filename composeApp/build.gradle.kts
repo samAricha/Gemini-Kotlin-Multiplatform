@@ -48,6 +48,10 @@ kotlin {
             val ktorVersion = "2.3.7"
             implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
+            //moko navigation
+            api("dev.icerock.moko:mvvm-core:0.16.1")
+            api("dev.icerock.moko:mvvm-compose:0.16.1")
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

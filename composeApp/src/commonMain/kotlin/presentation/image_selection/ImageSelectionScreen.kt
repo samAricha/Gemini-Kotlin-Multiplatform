@@ -1,21 +1,25 @@
-import androidx.compose.foundation.layout.padding
+package presentation.image_selection
+
+import ImagePicker
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
+import createPicker
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
 
 @Composable
 fun ImageSelectionScreen(){
 
-    val imagePicker:ImagePicker = createPicker()
+    val ImageSelectionviewModel = remember { ImageSelectionScreenViewModel() }
+
+    val imagePicker: ImagePicker = createPicker()
 
     imagePicker.registerPicker { imageBytes ->
 //        onEvent(ContactListEvent.OnPhotoPicked(imageBytes))
