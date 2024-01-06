@@ -1,8 +1,8 @@
 import ImagePicker
 import androidx.compose.runtime.Composable
 
-expect class ImagePickerFactory {
+//expect class ImagePickerFactory {
 
     @Composable
-    fun createPicker(): ImagePicker
-}
+expect fun createPicker(): ImagePicker
+//}

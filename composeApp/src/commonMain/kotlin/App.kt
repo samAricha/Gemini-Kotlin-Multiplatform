@@ -43,6 +43,12 @@ import java.io.File
 @Composable
 fun App() {
 
+
+
+
+
+
+
     val geminiApi = remember { GeminiApi() }
     lateinit var createdImage: TextImagePart.Image
 
@@ -63,85 +69,93 @@ fun App() {
         // do something with the file
         if (file != null) {
             coroutineScope.launch {
-                createdImage = createImagePart3(geminiApi, file.getFileByteArray())
+                createdImage = createImagePart(geminiApi, replaceContentWithFile(file.path))
             }
         }
 
     }
 
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
 
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = "Gemini Multiplatform ChatBot")},
-                    backgroundColor = MaterialTheme.colors.primary,
-                    contentColor = MaterialTheme.colors.onPrimary
-                )
-            },
-        ) {
-            Column(
-                Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Row {
-                    //Add Image Icon
-                    IconButton(
-                        modifier = Modifier.padding(4.dp ),
-                        onClick = {
-                            showFilePicker = true
-                             }
-                    ) {
-                        Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add Image")
-                    }
+        ImageSelectionScreen()
+//        var showContent by remember { mutableStateOf(false) }
 
 
-                    TextField(
-                        value = prompt,
-                        onValueChange = { prompt = it },
-                        modifier = Modifier.weight(7f)
-                    )
-                    TextButton(
-                        onClick = {
-                            if (prompt.isNotBlank()) {
-                                val textPart = TextImagePart.Text(prompt)
-
-                                coroutineScope.launch {
-                                    showProgress = true
-//                                    val textPart = TextImagePart.Text("Prompt text here")
-//                                    val imagePart = createImagePart(geminiApi,pickedImage)
-                                    val imagePart = createdImage
-
-                                    content = generateContent(geminiApi, textPart, imagePart)
-                                    showProgress = false
-                                }
-                            }
-                        },
-
-                        modifier = Modifier
-                            .weight(3f)
-                            .padding(all = 4.dp)
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        Text("Submit")
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-                if (showProgress) {
-                    CircularProgressIndicator()
-                } else {
-                    Text(content)
-                }
-
-
-            }
-        }
+//        Scaffold(
+//            topBar = {
+//                TopAppBar(
+//                    title = { Text(text = "Gemini Multiplatform ChatBot")},
+//                    backgroundColor = MaterialTheme.colors.primary,
+//                    contentColor = MaterialTheme.colors.onPrimary
+//                )
+//            },
+//        ) {
+//            Column(
+//                Modifier.fillMaxWidth(),
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//
+//                Row {
+//                    //Add Image Icon
+//                    IconButton(
+//                        modifier = Modifier.padding(4.dp ),
+//                        onClick = {
+//                            showFilePicker = true
+//                             }
+//                    ) {
+//                        Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add Image")
+//                    }
+//
+//
+//                    TextField(
+//                        value = prompt,
+//                        onValueChange = { prompt = it },
+//                        modifier = Modifier.weight(7f)
+//                    )
+//                    TextButton(
+//                        onClick = {
+//                            if (prompt.isNotBlank()) {
+//                                val textPart = TextImagePart.Text(prompt)
+//
+//                                coroutineScope.launch {
+//                                    showProgress = true
+////                                    val textPart = TextImagePart.Text("Prompt text here")
+////                                    val imagePart = createImagePart(geminiApi,pickedImage)
+//                                    val imagePart = createdImage
+//
+//                                    content = generateContent(geminiApi, textPart, imagePart)
+//                                    showProgress = false
+//                                }
+//                            }
+//                        },
+//
+//                        modifier = Modifier
+//                            .weight(3f)
+//                            .padding(all = 4.dp)
+//                            .align(Alignment.CenterVertically)
+//                    ) {
+//                        Text("Submit")
+//                    }
+//                }
+//
+//                Spacer(Modifier.height(16.dp))
+//                if (showProgress) {
+//                    CircularProgressIndicator()
+//                } else {
+//                    Text(content)
+//                }
+//
+//
+//            }
+//        }
 
     }
+}
+
+
+fun replaceContentWithFile(inputString: String): String {
+    return inputString.replace("content", "file")
 }
 
 
