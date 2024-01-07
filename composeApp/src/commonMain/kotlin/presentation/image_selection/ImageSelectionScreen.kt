@@ -4,18 +4,24 @@ import ImagePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
@@ -28,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import com.mohamedrejeb.calf.io.readByteArray
@@ -78,6 +85,12 @@ fun ImageSelectionScreen(
 
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Gemini ChatBot in KMM")},
+                backgroundColor = MaterialTheme.colors.secondary
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -95,7 +108,8 @@ fun ImageSelectionScreen(
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
 
             if(pickedImage == null) {
@@ -143,6 +157,19 @@ fun ImageSelectionScreen(
                 modifier = Modifier.fillMaxWidth(0.82f)
 
             )
+
+
+            Button(
+                onClick = {
+                    //here we place the actual implementation of calling Gemini api
+                },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    backgroundColor = MaterialTheme.colors.secondary,
+                ),
+            ) {
+                Text(text = "Search")
+            }
         }
 
 
