@@ -44,13 +44,8 @@ import com.mohamedrejeb.calf.io.readByteArray
 import com.mohamedrejeb.calf.picker.FilePickerFileType
 import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
 import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
-
-import domain.AppEvents
-import generateContent
 import kotlinx.coroutines.launch
-import presentation.components.SelectedPhoto
 import presentation.components.SelectedPhoto2
-import presentation.utils.rememberBitmapFromBytes
 
 @Composable
 fun ImageSelectionScreen(
@@ -72,19 +67,11 @@ fun ImageSelectionScreen(
     var showProgress by remember { mutableStateOf(false) }
 
 
-//    var pickedImage: ByteArray? by remember { mutableStateOf(null) }
-//    val imagePicker: ImagePicker = createPicker()
-//    imagePicker.registerPicker { imageBytes ->
-//        imageSelectionViewModel.onEvent(AppEvents.OnPhotoPicked(imageBytes))
-////        pickedImage = imageBytes
-//    }
-
     val pickerLauncher = rememberFilePickerLauncher(
         type = FilePickerFileType.Image,
         selectionMode = FilePickerSelectionMode.Single,
         onResult = { files ->
             files.firstOrNull()?.let { file ->
-//                pickedImage = file.readByteArray()
                 imageSelectionViewModel.updatePickedImage(file.readByteArray())
             }
         }
@@ -101,7 +88,6 @@ fun ImageSelectionScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-//                          imagePicker.pickImage()
                     pickerLauncher.launch()
                 },
                 shape = RoundedCornerShape(20.dp)
@@ -126,7 +112,6 @@ fun ImageSelectionScreen(
                         .clip(RoundedCornerShape(40))
                         .background(MaterialTheme.colors.secondary)
                         .clickable {
-//                            imagePicker.pickImage()
                             pickerLauncher.launch()
                         }
                         .border(
@@ -170,17 +155,37 @@ fun ImageSelectionScreen(
             Button(
                 onClick = {
                     //here we place the actual implementation of calling Gemini api
-                            if (geminiQuiz.isNotBlank() && pickedImage != null) {
-                                val textPart = TextImagePart.Text(geminiQuiz)
+                    if (geminiQuiz.isNotBlank() && pickedImage != null) {
+//                                val textPart = TextImagePart.Text(geminiQuiz)
 
                                 coroutineScope.launch {
                                     showProgress = true
 
-                                    val imagePart = pickedImage?.let { imageBytes ->
-                                        geminiApi.createImagePart(geminiApi, imageBytes)
+
+                                    val result = geminiApi.generateContentWithMedia(geminiQuiz, pickedImage!!)
+
+//                                    val imagePart = pickedImage?.let { imageBytes ->
+//                                        geminiApi.createImagePart(geminiApi, imageBytes)
+//                                    }
+
+//                                    val result = geminiApi.generateContent(geminiApi, textPart, imagePart!!)
+//                                    val result = geminiApi.generateContentTest(geminiQuiz)
+
+                                    println("our resp ----> ${result.getText()}")
+
+
+                                    if (result.error == null) {
+                                        content = result.getText().toString()
+                                    } else {
+                                        content = "No results"
                                     }
 
-                                    content = geminiApi.generateContent(geminiApi, textPart, imagePart!!)
+//                                    if (result.candidates != null) {
+//                                        content = result.candidates[0].content.parts[0].text
+//                                    } else {
+//                                        content = "No results"
+//                                    }
+//                                    content = geminiApi.generateContentTest(geminiQuiz)
                                     showProgress = false
                                 }
                             }
