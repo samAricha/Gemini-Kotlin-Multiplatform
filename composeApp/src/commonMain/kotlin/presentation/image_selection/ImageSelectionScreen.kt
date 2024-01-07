@@ -55,19 +55,20 @@ fun ImageSelectionScreen(
     val imageSelectionViewModel = remember { ImageSelectionScreenViewModel() }
     val asyncGeminiData by imageSelectionViewModel.geminiData.collectAsState()
     val geminiQuiz by imageSelectionViewModel.geminiQuiz.collectAsState()
+    val pickedImage by imageSelectionViewModel.pickedImage.collectAsState()
 
 
-    var pickedImage: ByteArray? by remember { mutableStateOf(null) }
+//    var pickedImage: ByteArray? by remember { mutableStateOf(null) }
 
 
 //    val imagePicker: ImagePicker = createPicker()
 
 
 
-    imagePicker.registerPicker { imageBytes ->
-        imageSelectionViewModel.onEvent(AppEvents.OnPhotoPicked(imageBytes))
-//        pickedImage = imageBytes
-    }
+//    imagePicker.registerPicker { imageBytes ->
+//        imageSelectionViewModel.onEvent(AppEvents.OnPhotoPicked(imageBytes))
+////        pickedImage = imageBytes
+//    }
 
     val pickerLauncher = rememberFilePickerLauncher(
         type = FilePickerFileType.Image,
@@ -76,7 +77,8 @@ fun ImageSelectionScreen(
             files.firstOrNull()?.let { file ->
                 // Do something with the selected file
                 // You can get the ByteArray of the file
-                pickedImage = file.readByteArray()
+//                pickedImage = file.readByteArray()
+                imageSelectionViewModel.updatePickedImage(file.readByteArray())
             }
         }
     )
