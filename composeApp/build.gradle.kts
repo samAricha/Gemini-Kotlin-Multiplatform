@@ -52,6 +52,9 @@ kotlin {
             api("dev.icerock.moko:mvvm-core:0.16.1")
             api("dev.icerock.moko:mvvm-compose:0.16.1")
 
+            // For Adaptive FilePicker
+            implementation("com.mohamedrejeb.calf:calf-file-picker:0.3.0")
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

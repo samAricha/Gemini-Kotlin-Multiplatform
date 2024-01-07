@@ -5,12 +5,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Search
@@ -25,9 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
+import com.mohamedrejeb.calf.io.readByteArray
+import com.mohamedrejeb.calf.picker.FilePickerFileType
+import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
+import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
 
 import domain.AppEvents
 import presentation.components.SelectedPhoto
+import presentation.components.SelectedPhoto2
 import presentation.utils.rememberBitmapFromBytes
 
 @Composable
@@ -37,6 +47,7 @@ fun ImageSelectionScreen(
 
     val imageSelectionViewModel = remember { ImageSelectionScreenViewModel() }
     val asyncGeminiData by imageSelectionViewModel.geminiData.collectAsState()
+    val geminiQuiz by imageSelectionViewModel.geminiQuiz.collectAsState()
 
 
     var pickedImage: ByteArray? by remember { mutableStateOf(null) }
@@ -51,6 +62,18 @@ fun ImageSelectionScreen(
 //        pickedImage = imageBytes
     }
 
+    val pickerLauncher = rememberFilePickerLauncher(
+        type = FilePickerFileType.Image,
+        selectionMode = FilePickerSelectionMode.Single,
+        onResult = { files ->
+            files.firstOrNull()?.let { file ->
+                // Do something with the selected file
+                // You can get the ByteArray of the file
+                pickedImage = file.readByteArray()
+            }
+        }
+    )
+
     var newGeminiModel = imageSelectionViewModel.geminiModel
 
 
@@ -58,7 +81,8 @@ fun ImageSelectionScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                          imagePicker.pickImage()
+//                          imagePicker.pickImage()
+                    pickerLauncher.launch()
                 },
                 shape = RoundedCornerShape(20.dp)
             ) {
@@ -69,40 +93,59 @@ fun ImageSelectionScreen(
             }
         }
     ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        if(asyncGeminiData?.imageBytes == null) {
-            Box(
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(RoundedCornerShape(40))
-                    .background(MaterialTheme.colors.secondary)
-                    .clickable {
-                        imagePicker.pickImage()
-                    }
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colors.onSecondary,
-                        shape = RoundedCornerShape(40)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Search,
-                    contentDescription = "Add photo",
-                    tint = MaterialTheme.colors.onSecondary,
-                    modifier = Modifier.size(40.dp)
+            if(pickedImage == null) {
+                Box(
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(RoundedCornerShape(40))
+                        .background(MaterialTheme.colors.secondary)
+                        .clickable {
+                            imagePicker.pickImage()
+                        }
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colors.onSecondary,
+                            shape = RoundedCornerShape(40)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Search,
+                        contentDescription = "Add photo",
+                        tint = MaterialTheme.colors.onSecondary,
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+            } else {
+                SelectedPhoto2(
+                    imageByteArray = pickedImage!!,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clickable {
+                            imagePicker.pickImage()
+                        }
                 )
             }
-        } else {
-            SelectedPhoto(
-                geminiDataModel = asyncGeminiData,
-                modifier = Modifier
-                    .size(150.dp)
-                    .clickable {
-                        imagePicker.pickImage()
-                    }
+
+
+            OutlinedTextField(
+                value = geminiQuiz,
+                placeholder = { Text(text = "Upload Image and ask question")},
+                onValueChange = {
+                    imageSelectionViewModel.updateQuiz(it)
+                },
+                label = { Text(text = "User Input")},
+                modifier = Modifier.fillMaxWidth(0.82f)
+
             )
         }
+
+
 
 
     }
