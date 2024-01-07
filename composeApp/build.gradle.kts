@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.kotlinx.serialization)
+
 }
 
 kotlin {
@@ -45,9 +47,6 @@ kotlin {
             implementation("com.darkrockstudios:mpfilepicker:3.1.0")
 
 
-            val ktorVersion = "2.3.7"
-            implementation("io.ktor:ktor-client-logging:$ktorVersion")
-
             //moko navigation
             api("dev.icerock.moko:mvvm-core:0.16.1")
             api("dev.icerock.moko:mvvm-compose:0.16.1")
@@ -55,7 +54,16 @@ kotlin {
             // For Adaptive FilePicker
             implementation("com.mohamedrejeb.calf:calf-file-picker:0.3.0")
 
+
+            val ktorVersion = "2.3.7"
+            implementation("io.ktor:ktor-client-logging:$ktorVersion")
+            implementation("io.ktor:ktor-client-core:$ktorVersion")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+            implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
         }
+
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.java)

@@ -12,7 +12,6 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Serializable
 data class Part(val text: String)
@@ -44,7 +43,9 @@ data class ImageContent(val parts: List<TextImagePart>)
 
 @Serializable
 sealed class TextImagePart {
+    @Serializable
     data class Text(val text: String) : TextImagePart()
+    @Serializable
     data class Image(val inline_data: InlineData) : TextImagePart()
 }
 
@@ -109,5 +110,36 @@ class GeminiApi {
             url { parameters.append("key", apiKey) }
             setBody(request)
         }.body<GenerateContentResponse>()
+    }
+
+
+
+    fun createImagePart(
+        api: GeminiApi,
+        imageFile: ByteArray,
+        targetWidth: Int = 512
+    ): TextImagePart.Image {
+//    val resizedImage = api.resizeImage(imageFile, targetWidth)
+
+        val base64EncodedImage = api.encodeImageToBase64test(imageFile)
+
+        return TextImagePart.Image(
+            InlineData(mime_type = "image/jpeg", data = base64EncodedImage)
+        )
+    }
+
+
+    suspend fun generateContent(
+        geminiApi: GeminiApi,
+        textPart: TextImagePart.Text,
+        imgPart: TextImagePart.Image
+    ): String {
+        val result = geminiApi.generateContentWithImage(listOf(textPart, imgPart))
+
+        return if (result.candidates != null) {
+            result.candidates[0].content.parts[0].text
+        } else {
+            "No results"
+        }
     }
 }
