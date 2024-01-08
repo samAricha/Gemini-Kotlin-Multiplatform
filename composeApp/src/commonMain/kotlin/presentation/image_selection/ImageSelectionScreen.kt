@@ -1,7 +1,6 @@
 package presentation.image_selection
 
 import GeminiApi
-import ImagePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -48,14 +47,10 @@ import kotlinx.coroutines.launch
 import presentation.components.SelectedPhoto2
 
 @Composable
-fun ImageSelectionScreen(
-    imagePicker: ImagePicker
-){
+fun ImageSelectionScreen(){
 
     val geminiApi = remember { GeminiApi() }
     val coroutineScope = rememberCoroutineScope()
-
-
 
     val imageSelectionViewModel = remember { ImageSelectionScreenViewModel() }
     val asyncGeminiData by imageSelectionViewModel.geminiData.collectAsState()
@@ -134,7 +129,7 @@ fun ImageSelectionScreen(
                     modifier = Modifier
                         .size(150.dp)
                         .clickable {
-                            imagePicker.pickImage()
+                            pickerLauncher.launch()
                         }
                 )
             }
@@ -158,37 +153,21 @@ fun ImageSelectionScreen(
                     if (geminiQuiz.isNotBlank() && pickedImage != null) {
 //                                val textPart = TextImagePart.Text(geminiQuiz)
 
-                                coroutineScope.launch {
-                                    showProgress = true
+                        coroutineScope.launch {
+                            showProgress = true
+                            val result = geminiApi.generateContentWithMedia(geminiQuiz, pickedImage!!)
+                            println("our resp ----> ${result.getText()}")
 
 
-                                    val result = geminiApi.generateContentWithMedia(geminiQuiz, pickedImage!!)
-
-//                                    val imagePart = pickedImage?.let { imageBytes ->
-//                                        geminiApi.createImagePart(geminiApi, imageBytes)
-//                                    }
-
-//                                    val result = geminiApi.generateContent(geminiApi, textPart, imagePart!!)
-//                                    val result = geminiApi.generateContentTest(geminiQuiz)
-
-                                    println("our resp ----> ${result.getText()}")
-
-
-                                    if (result.error == null) {
-                                        content = result.getText().toString()
-                                    } else {
-                                        content = "No results"
-                                    }
-
-//                                    if (result.candidates != null) {
-//                                        content = result.candidates[0].content.parts[0].text
-//                                    } else {
-//                                        content = "No results"
-//                                    }
-//                                    content = geminiApi.generateContentTest(geminiQuiz)
-                                    showProgress = false
-                                }
+                            if (result.error == null) {
+                                content = result.getText().toString()
+                            } else {
+                                content = "No results"
                             }
+
+                            showProgress = false
+                        }
+                    }
 
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -206,9 +185,6 @@ fun ImageSelectionScreen(
                 Text(content)
             }
         }
-
-
-
 
     }
 
