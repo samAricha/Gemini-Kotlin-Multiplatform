@@ -42,20 +42,6 @@ class GeminiApi {
         }
     }
 
-
-    fun encodeImageToBase64test(imageFile: ByteArray): String {
-//        val imageBytes = imageFile.readBytes()
-        val base64EncodedBytes = Base64.getEncoder().encode(imageFile)
-        return String(base64EncodedBytes, StandardCharsets.UTF_8)
-    }
-
-    fun encodeImageToBase64(imageFile: File): String {
-        val imageBytes = imageFile.readBytes()
-        val base64EncodedBytes = Base64.getEncoder().encode(imageBytes)
-        return String(base64EncodedBytes, StandardCharsets.UTF_8)
-    }
-
-
     suspend fun generateContentWithMedia(prompt: String, image: ByteArray): Response {
         return makeApiRequest("$baseUrl/gemini-pro-vision:generateContent?key=$apiKey") {
             addText(prompt)

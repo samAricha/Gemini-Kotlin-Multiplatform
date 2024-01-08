@@ -16,8 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import domain.GeminiDataModel
-import presentation.utils.rememberBitmapFromBytes
+import com.mohamedrejeb.calf.picker.toImageBitmap
 
 @Composable
 fun SelectedPhoto2(
@@ -25,12 +24,11 @@ fun SelectedPhoto2(
     modifier: Modifier = Modifier,
     iconSize: Dp = 25.dp
 ) {
-    val bitmap = rememberBitmapFromBytes(imageByteArray)
     val photoModifier = modifier.clip(RoundedCornerShape(35))
 
-    if(bitmap != null) {
+    if(imageByteArray != null) {
         Image(
-            bitmap = bitmap,
+            bitmap = imageByteArray.toImageBitmap(),
             contentDescription = "selctedImage",
             modifier = photoModifier,
             contentScale = ContentScale.Crop

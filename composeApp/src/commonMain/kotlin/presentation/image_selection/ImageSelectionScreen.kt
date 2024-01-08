@@ -76,7 +76,7 @@ fun ImageSelectionScreen(){
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Gemini ChatBot in KMM")},
+                title = { Text(text = "Gemini in KMP")},
                 backgroundColor = MaterialTheme.colors.secondary
             )
         },
@@ -151,8 +151,6 @@ fun ImageSelectionScreen(){
                 onClick = {
                     //here we place the actual implementation of calling Gemini api
                     if (geminiQuiz.isNotBlank() && pickedImage != null) {
-//                                val textPart = TextImagePart.Text(geminiQuiz)
-
                         coroutineScope.launch {
                             showProgress = true
                             val result = geminiApi.generateContentWithMedia(geminiQuiz, pickedImage!!)
